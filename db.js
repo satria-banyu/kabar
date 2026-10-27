@@ -45,10 +45,37 @@ CREATE TABLE IF NOT EXISTS messages (
   read_at TEXT,
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
+CREATE TABLE IF NOT EXISTS follows (
+  follower_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  followee_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  PRIMARY KEY (follower_id, followee_id)
+);
+CREATE TABLE IF NOT EXISTS stories (
+  id INTEGER PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  image TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+CREATE TABLE IF NOT EXISTS story_views (
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  story_id INTEGER NOT NULL REFERENCES stories(id) ON DELETE CASCADE,
+  PRIMARY KEY (user_id, story_id)
+);
 CREATE INDEX IF NOT EXISTS idx_posts_user ON posts(user_id, id);
 CREATE INDEX IF NOT EXISTS idx_comments_post ON comments(post_id, id);
 CREATE INDEX IF NOT EXISTS idx_messages_pair ON messages(sender_id, recipient_id, id);
 CREATE INDEX IF NOT EXISTS idx_messages_recipient ON messages(recipient_id, read_at);
+CREATE INDEX IF NOT EXISTS idx_follows_followee ON follows(followee_id);
+CREATE INDEX IF NOT EXISTS idx_stories_user ON stories(user_id, created_at);
 `);
+
+// Columns added after the first version; add them to existing databases.
+function addColumn(table, column, type) {
+  const cols = db.prepare(`PRAGMA table_info(${table})`).all();
+  if (!cols.some((c) => c.name === column)) db.exec(`ALTER TABLE ${table} ADD COLUMN ${column} ${type}`);
+}
+addColumn('users', 'avatar', 'TEXT');
+addColumn('posts', 'image', 'TEXT');
 
 module.exports = db;

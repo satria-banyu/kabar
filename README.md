@@ -1,8 +1,8 @@
 # Kabar
 
-A small public social network: sign up, edit your profile, post, like, comment, and send direct messages.
+A small Instagram-style social network with an Apple "Liquid Glass" look: frosted, translucent panels over a slowly moving color background, with spring animations throughout.
 
-**Stack:** Node.js + Express, SQLite (better-sqlite3), plain HTML/CSS/JS frontend. No build step.
+**Stack:** Node.js + Express, SQLite (better-sqlite3), multer for uploads, plain HTML/CSS/JS frontend. No build step.
 
 ## Run it
 
@@ -11,20 +11,29 @@ npm install
 npm start          # http://localhost:3000
 ```
 
-Data is stored in `data.db` next to `server.js` (override with `DB_PATH`). Set `PORT` to change the port and `NODE_ENV=production` to make the login cookie HTTPS-only.
+Settings (all optional):
+
+- `PORT`: port to listen on (default 3000)
+- `DB_PATH`: SQLite file (default `data.db` next to `server.js`)
+- `UPLOAD_DIR`: where photos are saved (default `uploads/`)
+- `NODE_ENV=production`: makes the login cookie HTTPS-only
+
+Databases from the first version are upgraded automatically on start.
 
 ## Features
 
-- Accounts with hashed passwords (bcrypt) and cookie sessions
-- Profiles with display name, bio, post and like counts
-- Public feed with "Load more" pagination; anyone can read, members can post
-- Likes (toggle) and comments; delete your own posts and comments
-- One-to-one messaging with an inbox, unread badges, and live updates (polling every few seconds)
-- People search
-- Light and dark mode, works on phones
+- **Photo posts** with captions; photos are resized in the browser before upload (max 1440px)
+- **Home feed** of you and the people you follow, with **double-tap to like** and a heart burst
+- **Stories** that last 24 hours: gradient rings for unseen stories, a full-screen player with progress bars, tap to skip, hold to pause
+- **Follow / followers / following**, with follower and following lists in a sheet
+- **Explore**: a grid of everyone's posts plus live people search
+- **Profiles**: profile photo, bio, counts, and a 3-column photo grid
+- **Comments** in a slide-up sheet (drag down or press Esc to close)
+- **Direct messages** with an inbox, unread badges and live updates
+- Floating glass tab bar with a sliding "lens", light and dark mode, works on phones; respects "reduce motion"
 
 ## Layout
 
-- `server.js`: JSON API under `/api`
-- `db.js`: SQLite schema
-- `public/`: the single-page frontend
+- `server.js`: JSON API under `/api`, uploaded files under `/uploads`
+- `db.js`: SQLite schema and upgrades
+- `public/`: the single-page frontend (`app.js`, `style.css`, `index.html`)

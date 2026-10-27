@@ -2,20 +2,29 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f3f1f8">
   <title>Kabar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Grand+Hotel&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-  <header class="topbar">
-    <a href="#/" class="brand">Kabar</a>
-    <form id="search-form" class="search" role="search">
-      <input id="search-input" type="search" placeholder="Search people" aria-label="Search people">
-    </form>
-    <nav id="nav"></nav>
+  <div class="backdrop" aria-hidden="true">
+    <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span><span class="blob b4"></span>
+  </div>
+
+  <header class="topbar glass">
+    <a href="#/" class="logo">Kabar</a>
+    <div id="top-actions" class="top-actions"></div>
   </header>
+
   <main id="app"></main>
-  <div id="toast" role="status" aria-live="polite"></div>
+
+  <nav id="tabbar" class="tabbar glass" aria-label="Main"></nav>
+  <div id="layer"></div>
+  <div id="toast" class="glass" role="status" aria-live="polite"></div>
   <script src="/app.js"></script>
 </body>
 </html>
